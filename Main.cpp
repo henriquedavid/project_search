@@ -2,6 +2,7 @@
 #include <chrono>
 #include <algorithm>
 #include <iterator>
+#include <cmath>
 
 /*
  *	X LINEAR INTERATIVA
@@ -13,16 +14,14 @@
  *	- FIBONACCI
 */
 
-int * linearSearch( int *first , int *last , int value ){
+int * linearSearch( int *first , int *last , int value , int *default_last){
 
 	for( auto i(first); i < last ; i++ ){
 		if( value == *i )
 			return i;
-
-		return last;
 	}
 
-	return last;
+	return default_last;
 }
 
 int * binarySearch( int *first , int *last , int value ){
@@ -48,6 +47,32 @@ int * binarySearch( int *first , int *last , int value ){
 	return back;
 
 }
+
+int * binary_rec( int *first , int *last , int value , int *default_last){
+
+	if(first <= last){
+
+		int middle = (last - first) / 2;
+
+		if( *( first + middle ) == value ){
+			return first + middle;
+		}
+
+		else if( *(first + middle ) < value ){
+			auto new_first = first + middle + 1;
+			return binary_rec(new_first, last, value, default_last);
+			
+		}
+		else{
+			auto new_last = last - middle - 1;
+			return binary_rec(first, new_last, value, default_last);
+		}
+	}
+
+	return default_last;
+
+}
+
 
 int * ternSearch( int *first, int *last, int value, int *default_last){
 
@@ -112,27 +137,30 @@ int * tern_rec( int *first, int *last, int value, int *default_last){
 	return default_last;
 }
 
-int * binary_rec( int *first , int *last , int value , int *default_last){
+int * jump_search( int *first, int *last, int value, int *default_last){
 
-	if(first <= last){
+	int aux = std::sqrt((last - first));
+	
+	int* new_first = first;
+	int* new_last = first+aux;
 
-		int middle = (last - first) / 2;
 
-		if( *( first + middle ) == value ){
-			return first + middle;
-		}
+	while(first <= last && new_last <= default_last){
 
-		else if( *(first + middle ) < value ){
-			auto new_first = first + middle + 1;
-			return binary_rec(new_first, last, value, default_last);
-			
-		}
+		if(value == *new_first)
+			return new_first;
+
+		if(value == *new_last)
+			return new_last;
+
+		if(value > *new_first && value < *new_last)
+			return linearSearch(new_first, new_last, value, default_last);
 		else{
-			auto new_last = last - middle - 1;
-			return binary_rec(first, new_last, value, default_last);
+			new_first += aux;
+			new_last += aux;
 		}
 	}
-
+	
 	return default_last;
 
 }
@@ -140,9 +168,9 @@ int * binary_rec( int *first , int *last , int value , int *default_last){
 
 int main(int argc, char* argv[]){
 
-	int A[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+	int A[] = { 0, 1, 2, 3, 4, 6,7, 8, 9, 10};
 	// Data container.
-	int targets[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,-4, 20 };
+	int targets[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 20, 21};
 	// Target values for testing.
 	// Prints out the original data container.
 	std::cout << "Array: [ ";
@@ -151,7 +179,7 @@ int main(int argc, char* argv[]){
 	// Executes several searchs in the data container.
 	for( const auto & e : targets )     {
 	    // Look for target in the entire range.
-	    auto result = tern_rec( std::begin(A), std::end(A), e , std::end(A));         
+	    auto result = jump_search( std::begin(A), std::end(A), e , std::end(A));         
 	    // Process the result         
 	     
 	    if ( result != std::end(A))         
