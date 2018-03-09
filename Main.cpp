@@ -8,7 +8,7 @@
  *	X BINÁRIA INTERATIVA 
  *	X BINÁRIA RECURSIVA
  *	X TERNÁRIA INTERATIVA
- *	- TERNÁRIA RECURSIVA
+ *	X TERNÁRIA RECURSIVA
  *	- JUMP SEARCH
  *	- FIBONACCI
 */
@@ -49,9 +49,9 @@ int * binarySearch( int *first , int *last , int value ){
 
 }
 
-int * tercSearch( int *first, int *last, int value, int *default_last){
+int * ternSearch( int *first, int *last, int value, int *default_last){
 
-	while(first <= last && last > 0 && last <= default_last){
+	while(first <= last){
 		int middle1 = (last - first) / 3;
 		int middle2 = 2 * middle1;
 
@@ -80,15 +80,43 @@ int * tercSearch( int *first, int *last, int value, int *default_last){
 	return default_last;
 }
 
-int * binary_rec( int *first , int *last , int value , int *default_last){
+int * tern_rec( int *first, int *last, int value, int *default_last){
 
-	//std::cout << *default_last << std::endl;
+
+	if(first <= last){
+		int middle1 = (last - first) / 3;
+		int middle2 = 2 * middle1;
+
+		if( *(first + middle1) == value)
+			return first + middle1;
+
+		if( *(first + middle2) == value)
+			return first + middle2;
+
+		if( value < *(first+middle1)){
+			return tern_rec(first, first + middle1 - 1, value, default_last);
+		}
+		else if(*(first+middle1) < value && value < *(first+middle2)){
+			return tern_rec(first+middle1+1, first+middle2-1, value, default_last);
+		}
+		else if (value > *(first+middle2)){
+			return tern_rec(first+middle2+1, last, value, default_last);
+		}
+		else{
+			std::cout << "Algo não saiu correto !!!\nNunca deveria entrar aqui!" << std::endl;
+		}
+
+
+	}
+
+	return default_last;
+}
+
+int * binary_rec( int *first , int *last , int value , int *default_last){
 
 	if(first <= last){
 
 		int middle = (last - first) / 2;
-
-		//std::cout << middle << std::endl;
 
 		if( *( first + middle ) == value ){
 			return first + middle;
@@ -114,7 +142,7 @@ int main(int argc, char* argv[]){
 
 	int A[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 	// Data container.
-	int targets[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -4, 20 };
+	int targets[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,-4, 20 };
 	// Target values for testing.
 	// Prints out the original data container.
 	std::cout << "Array: [ ";
@@ -123,7 +151,7 @@ int main(int argc, char* argv[]){
 	// Executes several searchs in the data container.
 	for( const auto & e : targets )     {
 	    // Look for target in the entire range.
-	    auto result = tercSearch( std::begin(A), std::end(A), e , std::end(A));         
+	    auto result = tern_rec( std::begin(A), std::end(A), e , std::end(A));         
 	    // Process the result         
 	     
 	    if ( result != std::end(A))         
