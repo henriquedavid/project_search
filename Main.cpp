@@ -10,8 +10,8 @@
  *	X BINÁRIA RECURSIVA
  *	X TERNÁRIA INTERATIVA
  *	X TERNÁRIA RECURSIVA
- *	- JUMP SEARCH
- *	- FIBONACCI
+ *	X JUMP SEARCH
+ *	- FIBONACCI SEARCH
 */
 
 int * linearSearch( int *first , int *last , int value , int *default_last){
@@ -165,6 +165,69 @@ int * jump_search( int *first, int *last, int value, int *default_last){
 
 }
 
+int fibonacci_number(int numero){
+	int a = 0, b = 1, number;
+	
+	for(auto i(0); i <= numero; i++){
+		number = a + b;
+		a = b;
+		b = number;
+
+		if(number > numero)
+			return b;
+	}
+
+	return -1;
+}
+
+int menorValor(int x, int y){
+
+	if(x < y)
+		return x;
+
+	return y;
+}
+
+int * fibonacci_search( int *first, int *last, int value, int *default_last){
+
+	int fib_m2 = 0;
+	int fib_m1 = 1;
+
+	int fib = fib_m2 + fib_m1;
+	int menor = 0, aux = -1;
+
+	while(fib <= *(last-1)){
+		fib_m2 = fib_m1;
+		fib_m1 = fib;
+		fib = fib_m2 + fib_m1;
+	}
+
+	while(fib > 1){
+
+		menor = menorValor(fib_m2+aux, *(last-2));
+
+		if(*(first+menor) < value){
+			fib = fib_m1;
+			fib_m1 = fib_m2;
+			fib_m2 = fib - fib_m1;
+			aux = menor;
+
+		} else if(*(first+menor) > value){
+			fib = fib_m2;
+			fib_m1 = fib_m1 - fib_m2;
+			fib_m2 = fib - fib_m1;
+
+		} else{
+			return first+menor;
+		}
+
+	}
+
+	if(fib_m1 && *(first+aux+1) == value)
+		return first+aux+1;
+
+	return default_last;
+}
 
 int main(int argc, char* argv[]){
 
@@ -179,7 +242,7 @@ int main(int argc, char* argv[]){
 	// Executes several searchs in the data container.
 	for( const auto & e : targets )     {
 	    // Look for target in the entire range.
-	    auto result = jump_search( std::begin(A), std::end(A), e , std::end(A));         
+	    auto result = fibonacci_search( std::begin(A), std::end(A), e , std::end(A));         
 	    // Process the result         
 	     
 	    if ( result != std::end(A))         
