@@ -13,6 +13,15 @@
  *	- FIBONACCI
 */
 
+int * linearSearch( int *first , int *last , int value ){
+
+	for( auto i( first ); i < last ; i++ ){
+		if( value == i )
+			return i;
+
+		return last;
+	}
+}
 
 int * binarySearch( int *first , int *last , int value ){
 	
@@ -35,10 +44,14 @@ int * binarySearch( int *first , int *last , int value ){
 	}
 	
 	return back;
+
+}
+
+int * tercSearch( int *first, int *last, int value){
 	
 }
 
-int * binaria_recursiva( int *first , int *last , int value , int *default_last){
+int * binary_rec( int *first , int *last , int value , int *default_last){
 
 	//std::cout << *default_last << std::endl;
 
