@@ -1,8 +1,13 @@
-#include <iostream>
+#include <iostream>		// std::cout
 #include <chrono>
 #include <algorithm>
-#include <iterator>
-#include <cmath>
+#include <iterator>		// std::ostream_iterator<int>
+#include <cmath>		// std::sqrt
+#include <string>		// std::string
+#include <sstream>
+#include <fstream>
+#include <vector>
+#include <iomanip>
 
 /*
  * Programa que possibilita testar 7 algoritmos de busca (linear, binaria interativa
@@ -10,9 +15,29 @@
  * 
 */
 
-int * linearSearch( int *first , int *last , int value , int *default_last){
+int getInteger(std::string value){
+	int ver = 0;
+	int valor;
 
-	for( auto i(first); i < last ; i++ ){
+	while(ver == 0){
+
+		std::istringstream iss(value);
+
+		iss >> valor >> std::ws;
+
+		if(iss.fail() or !iss.eof()){
+			std::cerr << "Erro ao converter!\nInsira novamente: \n" << std::endl;
+			std::cin >> value;
+		} else
+			ver = 1;
+	}
+
+	return valor;
+}
+
+int * linearSearch( int *first , int *last , int value ,  int *default_last){
+
+	for( auto i( first ); i < last ; i++ ){
 		if( value == *i )
 			return i;
 	}
@@ -20,7 +45,7 @@ int * linearSearch( int *first , int *last , int value , int *default_last){
 	return default_last;
 }
 
-int * binarySearch( int *first , int *last , int value ){
+int * binarySearch( int *first , int *last , int value , int *default_last){
 	
 	auto back( last );
 
@@ -159,21 +184,6 @@ int * jump_search( int *first, int *last, int value, int *default_last){
 
 }
 
-int fibonacci_number( int numero ){
-	int a = 0, b = 1, number;
-	
-	for( auto i(0) ; i <= numero ; i++ ){
-		number = a + b;
-		a = b;
-		b = number;
-
-		if( number > numero )
-			return b;
-	}
-
-	return -1;
-}
-
 int menorValor(	int x , int y ){
 	if( x < y ) return x;
 	return y;
@@ -219,29 +229,102 @@ int * fibonacci_search( int *first , int *last , int value , int *default_last )
 
 int main(int argc, char* argv[]){
 
-	int A[] = { 0, 1, 2, 3, 4, 6,7, 8, 9, 10};
-	// Data container.
-	int targets[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 20, 21};
-	// Target values for testing.
-	// Prints out the original data container.
-	std::cout << "Array: [ ";
-	std::copy( std::begin(A), std::end(A), std::ostream_iterator<int>( std::cout , " " ) );
-	std::cout << "]\n";
-	// Executes several searchs in the data container.
-	for( const auto & e : targets )     {
-	    // Look for target in the entire range.
-	    auto result = fibonacci_search( std::begin(A), std::end(A), e , std::end(A));         
-	    // Process the result         
-	     
-	    if ( result != std::end(A))         
-	    {             
-	      	std::cout << ">>> Found \"" << e << "\" at position "                       
-	     				<< std::distance(std::begin(A),result) << ".\n";         
-	    }         
-	    else
-	   	{             
-       		std::cout << ">>> Value \"" << e << "\" not found in array!\n";
-	    }
+	long int quant_Element = 0;
+	std::string tipo_busca = "LiN";
+	long int quant_max_Element = 1809983;
+	int valor = quant_max_Element+1;
+	int amostras = 0;
+	int media = 0;
+
+	std::ofstream FILE;
+	std::vector<std::string> cabecalho = {"Quantidade de Elementos","TEMPO"};
+
+	
+
+	if(argc < 3){
+		std::cout << "Há informações faltando\n ./EXECUTAVEL QUANTIDADE_AMOSTRAS NOME_DA_BUSCA" << std::endl;
+	} else{
+
+		amostras = getInteger(argv[1]);
+		tipo_busca = argv[2];
+
+		FILE.open("results_" + tipo_busca + ".txt");
+
+		if(FILE.fail()){
+			std::cout << "Erro ao abrir o arquivo!" << std::endl;
+			return -1;
+		}
+
+
+		FILE << "TIPO DE BUSCA: " << tipo_busca << "	Quantidade de amostras analisadas:" << amostras << std::endl << std::endl;
+		FILE << cabecalho[0] << "  ";
+		FILE << "  " << cabecalho[1] << "  ";
+		FILE << std::endl;
+
+		
+		
+
+		quant_Element = 100000;
+
+		for( auto rep(1); rep <= amostras; rep++){
+			
+
+			if(quant_Element > quant_max_Element)
+				quant_Element = quant_max_Element;
+
+			int A[quant_Element];
+		
+			for( auto i(0); i < quant_Element; i++){
+				A[i] = i;
+			}
+
+			valor = quant_Element+1;
+
+
+			// Target values for testing.
+			// Prints out the original data container.
+			/*std::cout << "Array: [ ";
+			for( auto i(0); i < quant_Element; i++){
+				std::cout << A[i] << " ";
+			}
+			std::cout << "]\n\n\n";*/
+			// Executes several searchs in the data container.
+
+			// Look for target in the entire range.
+
+
+			auto start = std::chrono::system_clock::now();
+
+			if(tipo_busca == "FS")
+				auto result = fibonacci_search( A, A+quant_Element, valor, A+quant_Element );
+			else if(tipo_busca == "BI")
+				auto result = binarySearch( A, A+quant_Element, valor, A+quant_Element );
+			else if(tipo_busca == "BR")
+				auto result = binary_rec( A, A+quant_Element, valor, A+quant_Element );
+			else if(tipo_busca == "TI")
+				auto result = ternSearch( A, A+quant_Element, valor, A+quant_Element );
+			else if(tipo_busca == "TR")
+				auto result = tern_rec( A, A+quant_Element, valor, A+quant_Element );
+			else if(tipo_busca == "JS")
+				auto result = jump_search( A, A+quant_Element, valor, A+quant_Element );
+			else
+				auto result = linearSearch( A, A+quant_Element, valor, A+quant_Element );
+		
+			auto end = std::chrono::system_clock::now();
+
+			int waste_time = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+
+			media += (waste_time - media) / rep; 
+
+			FILE << std::fixed << std::setprecision(cabecalho[0].size()) << std::setw(cabecalho[0].size()) << quant_Element << "  ";
+			FILE << "  " << std::fixed << std::setprecision(cabecalho[1].size()) << std::setw(cabecalho[1].size()) << media << "  ";
+			FILE << std::endl;
+		
+			quant_Element += 34199;
+
+		}
+
+		FILE.close();
 	}
 
 	return 0;
