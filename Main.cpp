@@ -230,14 +230,14 @@ int * fibonacci_search( int *first , int *last , int value , int *default_last )
 int main(int argc, char* argv[]){
 
 	long int quant_Element = 0;
-	std::string tipo_busca = "LiN";
+	std::string tipo_busca = "LN";
 	long int quant_max_Element = 1809983;
 	int valor = quant_max_Element+1;
 	int amostras = 0;
 	int media = 0;
 
 	std::ofstream FILE;
-	std::vector<std::string> cabecalho = {"Quantidade de Elementos","TEMPO"};
+	std::vector<std::string> cabecalho = {"Quantidade de Elementos","TEMPO(ns)"};
 
 	
 
@@ -248,7 +248,7 @@ int main(int argc, char* argv[]){
 		amostras = getInteger(argv[1]);
 		tipo_busca = argv[2];
 
-		FILE.open("results_" + tipo_busca + ".txt");
+		FILE.open("results_" + tipo_busca + ".csv");
 
 		if(FILE.fail()){
 			std::cout << "Erro ao abrir o arquivo!" << std::endl;
@@ -256,13 +256,10 @@ int main(int argc, char* argv[]){
 		}
 
 
-		FILE << "TIPO DE BUSCA: " << tipo_busca << "	Quantidade de amostras analisadas:" << amostras << std::endl << std::endl;
+		FILE << "TIPO DE BUSCA: " << tipo_busca << ", Quantidade de amostras analisadas:" << amostras << std::endl << std::endl;
 		FILE << cabecalho[0] << "  ";
-		FILE << "  " << cabecalho[1] << "  ";
-		FILE << std::endl;
-
-		
-		
+		FILE << ",  " << cabecalho[1] << "  ";
+		FILE << std::endl;		
 
 		quant_Element = 100000;
 
@@ -292,31 +289,34 @@ int main(int argc, char* argv[]){
 
 			// Look for target in the entire range.
 
+			for( auto t(0); t <= 100; t++){
 
-			auto start = std::chrono::system_clock::now();
+				auto start = std::chrono::system_clock::now();
 
-			if(tipo_busca == "FS")
-				auto result = fibonacci_search( A, A+quant_Element, valor, A+quant_Element );
-			else if(tipo_busca == "BI")
-				auto result = binarySearch( A, A+quant_Element, valor, A+quant_Element );
-			else if(tipo_busca == "BR")
-				auto result = binary_rec( A, A+quant_Element, valor, A+quant_Element );
-			else if(tipo_busca == "TI")
-				auto result = ternSearch( A, A+quant_Element, valor, A+quant_Element );
-			else if(tipo_busca == "TR")
-				auto result = tern_rec( A, A+quant_Element, valor, A+quant_Element );
-			else if(tipo_busca == "JS")
-				auto result = jump_search( A, A+quant_Element, valor, A+quant_Element );
-			else
-				auto result = linearSearch( A, A+quant_Element, valor, A+quant_Element );
+				if(tipo_busca == "FS")
+					auto result = fibonacci_search( A, A+quant_Element, valor, A+quant_Element );
+				else if(tipo_busca == "BI")
+					auto result = binarySearch( A, A+quant_Element, valor, A+quant_Element );
+				else if(tipo_busca == "BR")
+					auto result = binary_rec( A, A+quant_Element, valor, A+quant_Element );
+				else if(tipo_busca == "TI")
+					auto result = ternSearch( A, A+quant_Element, valor, A+quant_Element );
+				else if(tipo_busca == "TR")
+					auto result = tern_rec( A, A+quant_Element, valor, A+quant_Element );
+				else if(tipo_busca == "JS")
+					auto result = jump_search( A, A+quant_Element, valor, A+quant_Element );
+				else
+					auto result = linearSearch( A, A+quant_Element, valor, A+quant_Element );
 		
-			auto end = std::chrono::system_clock::now();
+				auto end = std::chrono::system_clock::now();
 
-			int waste_time = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+				int waste_time = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
 
-			media += (waste_time - media) / rep; 
+				media += (waste_time - media) / rep; 
 
-			FILE << std::fixed << std::setprecision(cabecalho[0].size()) << std::setw(cabecalho[0].size()) << quant_Element << "  ";
+			}
+
+			FILE << std::fixed << std::setprecision(cabecalho[0].size()) << std::setw(cabecalho[0].size()) << quant_Element << ",  ";
 			FILE << "  " << std::fixed << std::setprecision(cabecalho[1].size()) << std::setw(cabecalho[1].size()) << media << "  ";
 			FILE << std::endl;
 		
