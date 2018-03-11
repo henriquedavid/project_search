@@ -1,20 +1,27 @@
-#include <iostream>		// std::cout
-#include <chrono>
-#include <algorithm>
-#include <iterator>		// std::ostream_iterator<int>
-#include <cmath>		// std::sqrt
-#include <string>		// std::string
-#include <sstream>
-#include <fstream>
-#include <vector>
-#include <iomanip>
-
 /*
- * Programa que possibilita testar 7 algoritmos de busca (linear, binaria interativa
- * e recursiva, ternária interativa e recursiva, jump search e fibonacci search).
+ * Programa que possibilita testar 7 algoritmos
+ * de busca (linear, binaria interativa
+ * e recursiva, ternária interativa e
+ * recursiva, jump search e fibonacci search).
  * 
 */
 
+#include <iostream>		// std::cout, std::endl, std::cerr, std::cin
+#include <chrono>		// std::chrono, std::chrono::system_clock, std::chrono::duration_cast
+#include <algorithm>	// .count(),
+#include <iterator>		// std::ostream_iterator<int>
+#include <cmath>		// std::sqrt
+#include <string>		// std::string
+#include <sstream>		// std::istringstream
+#include <fstream>		// .open(), .close(), .fail()
+#include <vector>		// std::vector<std::string>
+#include <iomanip>		// std::setw(), std::setprecision()
+
+// Transforma uma string em um inteiro.
+/*
+ * \param recebe valor em string.
+ * \return retorna valor em inteiro.
+ */
 int getInteger(std::string value){
 	int ver = 0;
 	int valor;
@@ -34,6 +41,17 @@ int getInteger(std::string value){
 
 	return valor;
 }
+
+/* 
+ * Padrão para as buscas Linear, Binária Interativa, Binária Recursiva, Ternária Interativa,
+ * Jump Search e Fibonacci Search.
+ * 
+ * \param ponteiro first aponta para o primeiro elemento do vetor.
+ * \param ponteiro last aponta para após o último elemento do array.
+ * \param value - valor desejado que deseja buscar.
+ * \param ponteiro default_last aponta para após o último elemento do array.
+ * \return ponteiro para o valor desejado; ou para após o último elemento do array.
+ */
 
 int * linearSearch( int *first , int *last , int value ,  int *default_last){
 
@@ -184,6 +202,13 @@ int * jump_search( int *first, int *last, int value, int *default_last){
 
 }
 
+// Retorna o menor valor entre dois.
+/*
+ * \param recebe inteiro.
+ * \param recebe inteiro.
+ * \return retorna qual é o menor valor entre dois.
+ */
+
 int menorValor(	int x , int y ){
 	if( x < y ) return x;
 	return y;
@@ -229,70 +254,79 @@ int * fibonacci_search( int *first , int *last , int value , int *default_last )
 
 int main(int argc, char* argv[]){
 
-	long int quant_Element = 0;
+	long int quant_Element = 0; // acompanha a variação da quantidade de elementos.
+
+	/*
+	* tipo_busca informa qual o tipo de busca desejada e o padrão
+	* caso não seja informado o tipo de busca.
+	*/
 	std::string tipo_busca = "LN";
-	long int quant_max_Element = 1809983;
-	int valor = quant_max_Element+1;
-	int amostras = 0;
-	int media = 0;
+
+	/*
+	* quant_max é a quantidade máxima de um vetor (varia de computador em computador).
+	*/
+	long int quant_max_Element = 1809983; 
+	int amostras = 0; // Verifica a quantidade de amostras desejadas.
 
 	std::ofstream FILE;
 	std::vector<std::string> cabecalho = {"Quantidade de Elementos","TEMPO(ns)"};
 
-	
-
 	if(argc < 3){
+		// Apresenta erro caso o usuário não tenha executado corretamente o executável.
 		std::cout << "Há informações faltando\n ./EXECUTAVEL QUANTIDADE_AMOSTRAS NOME_DA_BUSCA" << std::endl;
 	} else{
 
+		// Transforma o valor da quantidade de amostras.
 		amostras = getInteger(argv[1]);
+		// Recebe o tipo de busca.
 		tipo_busca = argv[2];
 
+		// Cria arquivo com o nome do tipo de busca em formato csv para gerar os gráficos.
 		FILE.open("results_" + tipo_busca + ".csv");
 
+		// Verifica se foi possível abrir o arquivo, caso contrário apresenta erro e encerra o programa.
 		if(FILE.fail()){
 			std::cout << "Erro ao abrir o arquivo!" << std::endl;
 			return -1;
 		}
 
-
+		// Insere o padrão do cabeçalho no arquivo de saída.
 		FILE << "TIPO DE BUSCA: " << tipo_busca << ", Quantidade de amostras analisadas:" << amostras << std::endl << std::endl;
 		FILE << cabecalho[0] << "  ";
 		FILE << ",  " << cabecalho[1] << "  ";
 		FILE << std::endl;		
 
+		// Inicia a quantidade de elementos no vetor.
 		quant_Element = 100000;
 
+		// Executa séries de repetições de amostras.
 		for( auto rep(1); rep <= amostras; rep++){
 			
+			// Reinicia a média em cada repetição.
+			int media = 0;
 
+			// Previne caso a quantidade de elementos for maior do que suportado.
 			if(quant_Element > quant_max_Element)
 				quant_Element = quant_max_Element;
 
+			// Cria um vetor para armazenar elementos.
 			int A[quant_Element];
 		
+			// Insere elementos no vetor.
 			for( auto i(0); i < quant_Element; i++){
 				A[i] = i;
 			}
 
+			// Torna a variável valor não seja um elemento do vetor.
 			valor = quant_Element+1;
 
-
-			// Target values for testing.
-			// Prints out the original data container.
-			/*std::cout << "Array: [ ";
-			for( auto i(0); i < quant_Element; i++){
-				std::cout << A[i] << " ";
-			}
-			std::cout << "]\n\n\n";*/
-			// Executes several searchs in the data container.
-
-			// Look for target in the entire range.
+			// Realiza séries de testes dos tempos da busca escolhida.
 
 			for( auto t(0); t <= 100; t++){
 
 				auto start = std::chrono::system_clock::now();
 
+				// Realiza a busca desejada.
 				if(tipo_busca == "FS")
 					auto result = fibonacci_search( A, A+quant_Element, valor, A+quant_Element );
 				else if(tipo_busca == "BI")
@@ -316,10 +350,13 @@ int main(int argc, char* argv[]){
 
 			}
 
+			//Insere os dados no arquivo.
+
 			FILE << std::fixed << std::setprecision(cabecalho[0].size()) << std::setw(cabecalho[0].size()) << quant_Element << ",  ";
 			FILE << "  " << std::fixed << std::setprecision(cabecalho[1].size()) << std::setw(cabecalho[1].size()) << media << "  ";
 			FILE << std::endl;
 		
+			// Adiciona mais elementos no vetor.
 			quant_Element += 34199;
 
 		}
