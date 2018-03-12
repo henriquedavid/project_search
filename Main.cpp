@@ -63,7 +63,7 @@ int * linearSearch( int *first , int *last , int value ,  int *default_last){
 	return default_last;
 }
 
-int * binarySearch( int *first , int *last , int value , int *default_last){
+int * binarySearch(  int *first , int *last , int value , int *default_last){
 	
 	auto back( last );
 
@@ -113,7 +113,7 @@ int * binary_rec( int *first , int *last , int value , int *default_last){
 }
 
 
-int * ternSearch( int *first , int *last , int value , int *default_last ){
+int * ternSearch( int *first ,  int *last , int value ,  int *default_last ){
 
 	while( first <= last ){
 		int middle1 = ( last - first) / 3;
@@ -144,7 +144,7 @@ int * ternSearch( int *first , int *last , int value , int *default_last ){
 	return default_last;
 }
 
-int * tern_rec( int *first , int *last , int value , int *default_last ){
+int * tern_rec(  int *first , int *last , int value , int *default_last ){
 
 
 	if( first <= last ){
@@ -261,6 +261,7 @@ int main(int argc, char* argv[]){
 	* caso não seja informado o tipo de busca.
 	*/
 	std::string tipo_busca = "LN";
+	int valor;
 
 	/*
 	* quant_max é a quantidade máxima de um vetor (varia de computador em computador).
@@ -318,7 +319,7 @@ int main(int argc, char* argv[]){
 			}
 
 			// Torna a variável valor não seja um elemento do vetor.
-			valor = quant_Element+1;
+			valor = quant_max_Element+1;
 
 			// Realiza séries de testes dos tempos da busca escolhida.
 
@@ -357,7 +358,7 @@ int main(int argc, char* argv[]){
 			FILE << std::endl;
 		
 			// Adiciona mais elementos no vetor.
-			quant_Element += 34199;
+			quant_Element += 34200;
 
 		}
 
