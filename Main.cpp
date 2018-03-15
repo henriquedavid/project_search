@@ -53,17 +53,20 @@ int getInteger(std::string value){
  * \return ponteiro para o valor desejado; ou para após o último elemento do array.
  */
 
-int * linearSearch( int *first , int *last , int value ,  int *default_last){
+long int * linearSearch( long int *first , long int *last , int value , long  int *default_last){
 
 	for( auto i( first ); i < last ; i++ ){
+		
 		if( value == *i )
 			return i;
+
+
 	}
 
 	return default_last;
 }
 
-int * binarySearch(  int *first , int *last , int value , int *default_last){
+long int * binarySearch( long int *first , long int *last , int value , long int *default_last){
 	
 	auto back( last );
 
@@ -87,7 +90,7 @@ int * binarySearch(  int *first , int *last , int value , int *default_last){
 
 }
 
-int * binary_rec( int *first , int *last , int value , int *default_last){
+long int * binary_rec( long int *first , long int *last , int value , long int *default_last){
 
 	if( first <= last ){
 
@@ -113,7 +116,7 @@ int * binary_rec( int *first , int *last , int value , int *default_last){
 }
 
 
-int * ternSearch( int *first ,  int *last , int value ,  int *default_last ){
+long int * ternSearch( long int *first , long int *last , int value , long int *default_last ){
 
 	while( first <= last ){
 		int middle1 = ( last - first) / 3;
@@ -144,7 +147,7 @@ int * ternSearch( int *first ,  int *last , int value ,  int *default_last ){
 	return default_last;
 }
 
-int * tern_rec(  int *first , int *last , int value , int *default_last ){
+long int * tern_rec( long int *first , long int *last , int value , long int *default_last ){
 
 
 	if( first <= last ){
@@ -174,12 +177,12 @@ int * tern_rec(  int *first , int *last , int value , int *default_last ){
 	return default_last;
 }
 
-int * jump_search( int *first, int *last, int value, int *default_last){
+long int * jump_search(long int *first, long int *last, int value, long int *default_last){
 
 	int aux = std::sqrt( ( last - first ) );
 	
-	int* new_first = first;
-	int* new_last = first+aux;
+	long int* new_first = first;
+	long int* new_last = first+aux;
 
 
 	while( first <= last && new_last <= default_last ){
@@ -214,7 +217,7 @@ int menorValor(	int x , int y ){
 	return y;
 }
 
-int * fibonacci_search( int *first , int *last , int value , int *default_last ){
+long int * fibonacci_search( long int *first , long int *last , int value , long int *default_last ){
 
 	int fib_m2 = 0;
 	int fib_m1 = 1;
@@ -266,7 +269,7 @@ int main(int argc, char* argv[]){
 	/*
 	* quant_max é a quantidade máxima de um vetor (varia de computador em computador).
 	*/
-	long int quant_max_Element = 1809983; 
+	long int quant_max_Element = 1026991; 
 	int amostras = 0; // Verifica a quantidade de amostras desejadas.
 
 	std::ofstream FILE;
@@ -298,7 +301,9 @@ int main(int argc, char* argv[]){
 		FILE << std::endl;		
 
 		// Inicia a quantidade de elementos no vetor.
-		quant_Element = 100000;
+
+		int media_inicial = quant_max_Element / amostras;
+		quant_Element = media_inicial;
 
 		// Executa séries de repetições de amostras.
 		for( auto rep(1); rep <= amostras; rep++){
@@ -311,7 +316,7 @@ int main(int argc, char* argv[]){
 				quant_Element = quant_max_Element;
 
 			// Cria um vetor para armazenar elementos.
-			int A[quant_Element];
+			long int A[quant_Element];
 		
 			// Insere elementos no vetor.
 			for( auto i(0); i < quant_Element; i++){
@@ -323,7 +328,7 @@ int main(int argc, char* argv[]){
 
 			// Realiza séries de testes dos tempos da busca escolhida.
 
-			for( auto t(0); t <= 100; t++){
+			for( auto t(0); t < 100; t++){
 
 				auto start = std::chrono::system_clock::now();
 
@@ -358,7 +363,7 @@ int main(int argc, char* argv[]){
 			FILE << std::endl;
 		
 			// Adiciona mais elementos no vetor.
-			quant_Element += 34200;
+			quant_Element += media_inicial;
 
 		}
 
