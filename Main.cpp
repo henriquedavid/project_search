@@ -55,29 +55,41 @@ int getInteger(std::string value){
 
 long int * linearSearch( long int *first , long int *last , int value , long  int *default_last){
 
+	// Percorre o vetor.
 	for( auto i( first ); i < last ; i++ ){
-		
+
+		// Verifica se é o valor desejado.
 		if( value == *i )
 			return i;
-
-
 	}
 
+	// Retorna o último elemento.
 	return default_last;
 }
 
+/* 
+ * \param ponteiro first aponta para o primeiro elemento do vetor.
+ * \param ponteiro last aponta para após o último elemento do array.
+ * \param value - valor desejado que deseja buscar.
+ * \param ponteiro default_last aponta para após o último elemento do array.
+ * \return ponteiro para o valor desejado; ou para após o último elemento do array.
+ */
 long int * binarySearch( long int *first , long int *last , int value , long int *default_last){
-	
+	// Atribui a back o ponteiro last para não perder o ponteiro final
 	auto back( last );
 
+	//Percorre o vetor de forma que haja divisões e seus valores de inicio e fim ficam variando.
 	while( first <= last ){
 		int middle = ( last - first ) / 2;
 
+		// Verifica se o valor do meio no intervalo é o valor escolhido
 		if(	*( first + middle ) == value ){
 		
 			return first + middle;
 		}
 
+		// Se o valor não é o do meio, verifica se o valor é menor que a metade, se sim, a metade é o novo começo
+		// caso contrário é o novo final do intervalo.
 		if( *( first + middle ) < value ){
 			first = first + middle + 1;
 		}
@@ -86,49 +98,77 @@ long int * binarySearch( long int *first , long int *last , int value , long int
 		}
 	}
 	
+	// Caso não tenha encontrado o valor, retorne o final do intervalo.
 	return back;
 
 }
 
+/* 
+ * \param ponteiro first aponta para o primeiro elemento do vetor.
+ * \param ponteiro last aponta para após o último elemento do array.
+ * \param value - valor desejado que deseja buscar.
+ * \param ponteiro default_last aponta para após o último elemento do array.
+ * \return ponteiro para o valor desejado; ou para após o último elemento do array.
+ */
 long int * binary_rec( long int *first , long int *last , int value , long int *default_last){
 
+	// Condição para garantir que não haja procura fora do intervalo informado do número
 	if( first <= last ){
 
+		// Descobre o valor da metade do intervalo
 		int middle = ( last - first ) / 2;
 
+		// Verifica se a metade é o valor procurado, caso contrário verifica se é maior, se sim,
+		// a metade é o inicio, senão, a metade é o final e chama novamente a função.
 		if( *( first + middle ) == value ){
 			return first + middle;
 		}
 
 		else if( *( first + middle ) < value ){
+			// Retira o valor já consultado
 			auto new_first = first + middle + 1;
 			return binary_rec( new_first , last , value , default_last );
 			
 		}
 		else{
+			// Retira o valor já consultado
 			auto new_last = last - middle - 1;
 			return binary_rec( first , new_last , value , default_last );
 		}
 	}
 
+	// Caso não encontre o valor retornar o final do vetor.
 	return default_last;
 
 }
 
-
+/* 
+ * \param ponteiro first aponta para o primeiro elemento do vetor.
+ * \param ponteiro last aponta para após o último elemento do array.
+ * \param value - valor desejado que deseja buscar.
+ * \param ponteiro default_last aponta para após o último elemento do array.
+ * \return ponteiro para o valor desejado; ou para após o último elemento do array.
+ */
 long int * ternSearch( long int *first , long int *last , int value , long int *default_last ){
 
+	// Percorre o vetor
 	while( first <= last ){
+
+		// Divide o vetor em 3 partes
 		int middle1 = ( last - first) / 3;
 		int middle2 = 2 * middle1;
 
-
+		// Verifica se o valor desejado está em uma das duas partes encontras
 		if( *( first + middle1 ) == value )
 			return first + middle1;
 
 		if( *( first + middle2 ) == value )
 			return first + middle2;
 
+		// Se o valor for menor que o primeiro valor, o final é o primeiro valor da divisão,
+		// caso contrário verificar se está entre o primeiro e o segundo valor, se sim, então
+		// o inicio é o primeiro valor e o final é o segundo valor, caso contrário o segundo valor
+		// é o final.
 		if( value < *( first + middle1 ) ){
 			last = first + middle1 - 1;
 		}
@@ -144,22 +184,34 @@ long int * ternSearch( long int *first , long int *last , int value , long int *
 		}
 	}
 
+	// Se não encontrado retornar o final do intervalo.
 	return default_last;
 }
 
+/* 
+ * \param ponteiro first aponta para o primeiro elemento do vetor.
+ * \param ponteiro last aponta para após o último elemento do array.
+ * \param value - valor desejado que deseja buscar.
+ * \param ponteiro default_last aponta para após o último elemento do array.
+ * \return ponteiro para o valor desejado; ou para após o último elemento do array.
+ */
 long int * tern_rec( long int *first , long int *last , int value , long int *default_last ){
 
-
+	// Verifica se o ponteiro first está dentro do intervalo.
 	if( first <= last ){
+		// Descobre os dois pontos médios quando dividido em 3 partes.
 		int middle1 = ( last - first ) / 3;
 		int middle2 = 2 * middle1;
 
+		// Verifica se o valor em algum dos pontos médios das partes do vetor.
 		if( *( first + middle1 ) == value )
 			return first + middle1;
 
 		if( *( first + middle2 ) == value )
 			return first + middle2;
 
+
+		// Verifica em qual intervalo está o valor, quando definido chama novamente a função até encontrar o valor.
 		if( value < *( first + middle1 ) ){
 			return tern_rec( first , first + middle1 - 1 , value , default_last );
 		}
@@ -174,25 +226,37 @@ long int * tern_rec( long int *first , long int *last , int value , long int *de
 		}
 	}
 
+	// Se o valor não foi encontrado então retornar o inicio do intervalo original.
 	return default_last;
 }
 
+/* 
+ * \param ponteiro first aponta para o primeiro elemento do vetor.
+ * \param ponteiro last aponta para após o último elemento do array.
+ * \param value - valor desejado que deseja buscar.
+ * \param ponteiro default_last aponta para após o último elemento do array.
+ * \return ponteiro para o valor desejado; ou para após o último elemento do array.
+ */
 long int * jump_search(long int *first, long int *last, int value, long int *default_last){
 
+	// Define a raiz quadrada da distância o intervalo.
 	int aux = std::sqrt( ( last - first ) );
 	
+	// Variaveis para não modificar o inicio e o final originais.
 	long int* new_first = first;
 	long int* new_last = first+aux;
 
-
+	// Procura por todo o vetor em partes
 	while( first <= last && new_last <= default_last ){
-
+		// Verifica se o valor está no inicio (modificado), ou no final (modificado) do intervalo.
 		if( value == *new_first )
 			return new_first;
 
 		if( value == *new_last )
 			return new_last;
 
+		// Verifica se o valor está no intervalo do inicio e o final
+		// Caso o valor não esteja é estabelecido novos valores para o inicio e o final do intervalo
 		if( value > *new_first && value < *new_last )
 			return linearSearch( new_first , new_last , value , default_last );
 		else{
@@ -200,41 +264,61 @@ long int * jump_search(long int *first, long int *last, int value, long int *def
 			new_last += aux;
 		}
 	}
-	
+
+	// Caso o valor não seja encontrado retorna o final original do intervalo completo.
 	return default_last;
 
 }
 
-// Retorna o menor valor entre dois.
+// Retorna o menor valor entre dois números, função para auxiliar a função fibonacci_search.
 /*
  * \param recebe inteiro.
  * \param recebe inteiro.
  * \return retorna qual é o menor valor entre dois.
  */
-
 int menorValor(	int x , int y ){
 	if( x < y ) return x;
 	return y;
 }
 
+/* 
+ * \param ponteiro first aponta para o primeiro elemento do vetor.
+ * \param ponteiro last aponta para após o último elemento do array.
+ * \param value - valor desejado que deseja buscar.
+ * \param ponteiro default_last aponta para após o último elemento do array.
+ * \return ponteiro para o valor desejado; ou para após o último elemento do array.
+ */
 long int * fibonacci_search( long int *first , long int *last , int value , long int *default_last ){
 
+	// Estabelece a condição básica dos números de fibonacci.
 	int fib_m2 = 0;
 	int fib_m1 = 1;
 
+	// Realiza a condição inicial para os números de fibonacci.
 	int fib = fib_m2 + fib_m1;
+
+	// Define variaveis auxiliares.
 	int menor = 0 , aux = -1;
 
+	// Verifica os números de fibonacci em todo o vetor até encontrar qual se aproxima do valor,
+	// sendo sempre menor ou igual, não podendo ser um número maior.
 	while( fib <= *( last - 1 ) ){
 		fib_m2 = fib_m1;
 		fib_m1 = fib;
 		fib = fib_m2 + fib_m1;
 	}
 
+	// Condição de início para a busca a partir da sequência.
 	while( fib > 1 ){
 
+		// Verifica qual o menor valor entre o fibonacci + menor ou o final do vetor.
 		menor = menorValor( fib_m2 + aux , *( last - 2 ) );
 
+		/* Se o valor encontrado for igual ao vetor então é o valor procurado, caso contrário
+		 * verifica se o menor é menor que o valor, se sim então atualiza os números de fibonacci
+		 * e permite a nome do menor com o valor encontrado, caso contrário apenas
+		 * atualiza os números de fibonacci.
+		 */ 
 		if( *( first + menor ) < value ){
 			fib = fib_m1;
 			fib_m1 = fib_m2;
@@ -252,6 +336,7 @@ long int * fibonacci_search( long int *first , long int *last , int value , long
 
 	}
 
+	// Caso o valor não seja encontrado, então retornar a posição do ultimo valor no intervalo original.
 	return default_last;
 }
 
@@ -277,7 +362,9 @@ int main(int argc, char* argv[]){
 
 	if(argc < 3){
 		// Apresenta erro caso o usuário não tenha executado corretamente o executável.
-		std::cout << "Há informações faltando\n ./EXECUTAVEL QUANTIDADE_AMOSTRAS NOME_DA_BUSCA" << std::endl;
+		std::cout << "Há informações faltando\n ./EXECUTAVEL QUANTIDADE_AMOSTRAS REPRESENTACAO_DA_BUSCA" << std::endl
+				  << "Opção de Buscas:\nLN - Linear\nBI - Binária Interativa\nBR - Binária Recursiva\n"
+				  << "TI - Ternária Interativa\nTR - Ternária Recursiva\nJS - Jump Search\nFB - Fibonacci Search\n";
 	} else{
 
 		// Transforma o valor da quantidade de amostras.
