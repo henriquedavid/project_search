@@ -1,8 +1,13 @@
-# Introduction
+Trabalho de Estrutura de Dados Básicas I
 
-This project focuses on seven types of search algorithms applied to a order sequence container implemented with array.
+Aluno: Henrique David de Medeiros
 
-The functions are called on ranges defined over an sort array of integers. Therefore they receive four parameters: three iterators (pointers) that define a half-closed interval for searching and a default iterator from one of pointers, [first;last), the value that are looking for, and the last. The function is going to find to the full array, it won't find none, because the ideia it's to look to the worst case from all algorithm, finding no one, return last.
+O trabalho consistem em analisar o funcionamento dos algoritmos de busca em função do seu tempo e a quantidade de elementos dentro de um vetor. Para o trabalho foi realizado o estudo de 7 tipos de algoritmos de buscas: Linear, Binária (interativa e recursiva), Ternária (interativa e recursiva), Jump Search e Fibonacci Search.
 
-# Authorship
-Program developed by Henrique David (henriquemed101@gmail.com).
+Além do relatório está disponível:
+
+	- "TABELA - MATERIAL SUPORTE.pdf"
+	  Apresentação de todos os dados obtidos em formato de tabela, tempo em virtude da quantidade de elementos no vetor.
+
+	- "Main.cpp"
+	  Código com todos os algoritmos divididos em funções.
