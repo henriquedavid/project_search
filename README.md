@@ -11,3 +11,6 @@ Além do relatório está disponível:
 
 	- "Main.cpp"
 	  Código com todos os algoritmos divididos em funções.
+
+	- "Resultados"
+	  Dados gerados a partir do programa executado.
